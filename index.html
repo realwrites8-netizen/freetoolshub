@@ -1,0 +1,184 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FreeTools Hub - Free Online Tools</title>
+<meta name="description" content="Use free online tools including word counter, percentage calculator and password generator.">
+<style>
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f5f7fc;
+  color: #172033;
+}
+header {
+  background: #172554;
+  color: white;
+  padding: 25px 7%;
+}
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+nav h2 { margin: 0; }
+nav a { color: white; text-decoration: none; }
+.hero {
+  text-align: center;
+  padding: 65px 15px 35px;
+}
+.hero h1 { font-size: 38px; margin-bottom: 12px; }
+.hero p { color: #64748b; }
+main {
+  max-width: 1000px;
+  margin: auto;
+  padding: 20px;
+}
+.tools {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+  gap: 18px;
+}
+.tool {
+  background: white;
+  padding: 22px;
+  border-radius: 14px;
+  box-shadow: 0 3px 15px #00000009;
+}
+.tool h3 { margin-top: 0; }
+input, textarea {
+  width: 100%;
+  padding: 11px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  margin: 8px 0;
+}
+textarea { min-height: 90px; resize: vertical; }
+button {
+  background: #2563eb;
+  color: white;
+  border: 0;
+  padding: 11px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+button:hover { background: #1d4ed8; }
+.result { font-weight: bold; color: #2563eb; }
+footer {
+  text-align: center;
+  padding: 30px;
+  color: #64748b;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <h2>⚡ FreeTools Hub</h2>
+    <a href="#tools">Explore Tools</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <h1>Free Tools. Easy Life.</h1>
+  <p>Useful online tools, all in one place. No installation needed.</p>
+</section>
+
+<main id="tools">
+  <h2>Explore Our Tools</h2>
+
+  <div class="tools">
+
+    <section class="tool">
+      <h3>📝 Word Counter</h3>
+      <textarea id="words" placeholder="Enter your text..." oninput="countWords()"></textarea>
+      <p class="result" id="wordResult">Words: 0 | Characters: 0</p>
+    </section>
+
+    <section class="tool">
+      <h3>🔠 Text Case Converter</h3>
+      <textarea id="caseText" placeholder="Enter your text..."></textarea>
+      <button onclick="convertCase('upper')">UPPERCASE</button>
+      <button onclick="convertCase('lower')">lowercase</button>
+      <p class="result" id="caseResult"></p>
+    </section>
+
+    <section class="tool">
+      <h3>🧮 Percentage Calculator</h3>
+      <input type="number" id="part" placeholder="Enter number">
+      <input type="number" id="total" placeholder="Enter total">
+      <button onclick="percentage()">Calculate</button>
+      <p class="result" id="percentResult"></p>
+    </section>
+
+    <section class="tool">
+      <h3>🔐 Password Generator</h3>
+      <input type="number" id="passLength" value="12" min="8" max="64">
+      <button onclick="generatePassword()">Generate Password</button>
+      <input id="password" readonly placeholder="Your password">
+      <button onclick="copyPassword()">Copy Password</button>
+    </section>
+
+  </div>
+</main>
+
+<footer>
+  <p>© 2026 FreeTools Hub. All rights reserved.</p>
+  <p>Free tools for everyone ❤️</p>
+</footer>
+
+<script>
+function countWords() {
+  const t = document.getElementById('words').value;
+  const words = t.trim() ? t.trim().split(/\s+/).length : 0;
+  document.getElementById('wordResult').textContent =
+    `Words: ${words} | Characters: ${t.length}`;
+}
+
+function convertCase(type) {
+  const el = document.getElementById('caseText');
+  el.value = type === 'upper'
+    ? el.value.toUpperCase()
+    : el.value.toLowerCase();
+  document.getElementById('caseResult').textContent = 'Converted!';
+}
+
+function percentage() {
+  const a = Number(document.getElementById('part').value);
+  const b = Number(document.getElementById('total').value);
+  document.getElementById('percentResult').textContent =
+    b === 0 ? 'Enter a non-zero total.' : `${(a / b * 100).toFixed(2)}%`;
+}
+
+function generatePassword() {
+  const length = Number(document.getElementById('passLength').value);
+  if (!Number.isInteger(length) || length < 8 || length > 64) {
+    document.getElementById('password').value = 'Choose 8–64 characters';
+    return;
+  }
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$%&*';
+  const random = new Uint32Array(length);
+  crypto.getRandomValues(random);
+  document.getElementById('password').value =
+    Array.from(random, n => chars[n % chars.length]).join('');
+}
+
+function copyPassword() {
+  const el = document.getElementById('password');
+  if (el.value) {
+    navigator.clipboard.writeText(el.value)
+      .then(() => alert('Password copied!'))
+      .catch(() => alert('Please copy the password manually.'));
+  }
+}
+</script>
+
+</body>
+</html>
